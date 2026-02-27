@@ -8,26 +8,42 @@ seconds = time.time()
 
 action = sys.argv[1]
 ref = sys.argv[2]
-task = sys.argv[3]
-local_time = time.ctime(seconds)
 
-if os.path.exists(file_name):
+try:
+    task = sys.argv[3]
+except IndexError:
+    pass
+
+time_created = time.ctime(seconds)
+time_updated = time.ctime(seconds)
+
+int_ref = int(ref) - 1
+
+if os.path.exists(file_name): # checking and reading previous data
     with open(file_name, "r") as file:
         tasks = json.load(file)
 else: 
     tasks = []
+    
 
-
-task_object = {
+if action == "add":
+    task_object = {
     "status" : action,
     "id" : ref,
     "description" : task,
-    "createdAt" : local_time,
-    "updatedAt" : local_time
-
+    "createdAt" : time_created,
+    "updatedAt" : time_updated
 }
+    tasks.append(task_object)
 
-tasks.append(task_object)
+
+if action == "update":
+    tasks[int_ref]['description'] = task
+    tasks[int_ref]['updatedAt'] = time_updated
+
+if action == "delete":
+    del tasks[int_ref]
+
 
 with open("data.json", "w") as file:
     json.dump(tasks, file, indent = 4)
