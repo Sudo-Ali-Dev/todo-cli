@@ -17,7 +17,7 @@ except IndexError:
 time_created = time.ctime(seconds)
 time_updated = time.ctime(seconds)
 
-int_ref = int(ref) - 1
+ref_ind = int(ref) - 1
 
 if os.path.exists(file_name): # checking and reading previous data
     with open(file_name, "r") as file:
@@ -36,13 +36,12 @@ if action == "add":
 }
     tasks.append(task_object)
 
-
 if action == "update":
-    tasks[int_ref]['description'] = task
-    tasks[int_ref]['updatedAt'] = time_updated
+    tasks[ref_ind]['description'] = task
+    tasks[ref_ind]['updatedAt'] = time_updated
 
 if action == "delete":
-    del tasks[int_ref]
+    del tasks[ref_ind]
 
 
 with open("data.json", "w") as file:
